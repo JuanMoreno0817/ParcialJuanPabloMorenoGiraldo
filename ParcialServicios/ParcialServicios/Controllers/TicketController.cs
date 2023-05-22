@@ -21,12 +21,11 @@ namespace ParcialServicios.Controllers
         public async Task<ActionResult<Ticket>> GetTicketById(Guid? ticketId)
         {
             if (await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId) == null)
-                return Ok("Boleta no válida");
+                return NotFound();
 
-            if (await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId && t.IsUsed == true) != null)
-                return Ok("Boleta ya usada");
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticketId);
 
-            return Ok("Boleta válida, puede ingresar al concierto");
+            return Ok(ticket);
         }
 
         [HttpPost, ActionName("Create")]
